@@ -1,24 +1,26 @@
-import 'package:fast_food_qr_ordering/bag_provider.dart';
 import 'package:fast_food_qr_ordering/db_helper.dart';
-import 'package:fast_food_qr_ordering/pages/create_code.dart';
+import 'package:fast_food_qr_ordering/pages/order_code.dart';
 import 'package:fast_food_qr_ordering/pages/home.dart';
 import 'package:fast_food_qr_ordering/user_provider.dart';
 import 'package:fast_food_qr_ordering/worker_bag_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
+import 'package:fast_food_qr_ordering/storage.dart';
 
 import 'package:uuid/uuid.dart';
 
 class WorkerOrderSummary extends StatefulWidget {
-  const WorkerOrderSummary({Key? key}) : super(key: key);
+  const WorkerOrderSummary({Key? key, required this.orderID}) : super(key: key);
 
+  final String orderID;
   @override
   State<WorkerOrderSummary> createState() => _WorkerOrderSummaryState();
 }
 
 class _WorkerOrderSummaryState extends State<WorkerOrderSummary> {
   DBHelper? dbHelper = DBHelper();
+  final storage = OrderStorage();
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -114,6 +116,7 @@ class _WorkerOrderSummaryState extends State<WorkerOrderSummary> {
                       child: ElevatedButton(
                         onPressed: () {
                           dbHelper!.deleteAllWorkerBagItems();
+                          storage.deleteOrder(widget.orderID);
                           Navigator.pop(context);
                           userProvider.currentUser = "Customer";
                         },

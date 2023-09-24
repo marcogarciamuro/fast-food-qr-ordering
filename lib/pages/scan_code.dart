@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fast_food_qr_ordering/order.dart';
 import 'package:fast_food_qr_ordering/worker_bag_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:fast_food_qr_ordering/bag_model.dart';
 import 'package:fast_food_qr_ordering/bag_provider.dart';
 import 'package:fast_food_qr_ordering/db_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:fast_food_qr_ordering/storage.dart';
 
 class ScanCode extends StatefulWidget {
   const ScanCode({Key? key}) : super(key: key);
@@ -38,8 +40,8 @@ class _ScanCodeState extends State<ScanCode> {
     return Scaffold(
         appBar: AppBar(
             elevation: 0.0,
-            title:
-                Text("Scan Order Code", style: TextStyle(color: Colors.black)),
+            title: const Text("Scan Order Code",
+                style: TextStyle(color: Colors.black)),
             backgroundColor: Colors.transparent,
             iconTheme: const IconThemeData(color: Colors.black)),
         body: Center(
@@ -100,6 +102,7 @@ class _ScanCodeState extends State<ScanCode> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    final storage = OrderStorage();
     setState(() {
       this.controller = controller;
     });
@@ -109,20 +112,24 @@ class _ScanCodeState extends State<ScanCode> {
       });
       if (result?.code != null) {
         await controller.pauseCamera();
-        final Map order = jsonDecode(result?.code ?? "");
-        var uuid = const Uuid();
-        print("order: $order");
-        order['items'].forEach((itemMap) {
-          print("ITEM FOUND");
-          itemMap['uniqueID'] = uuid.v1();
+        final orderID = result?.code ?? "";
+        final orderDetails = await storage.getOrder(orderID);
+        if (orderDetails == null) {
+          print("ERROR: ORDER IS NOT IN SYSTEM");
+        }
+        final items = jsonDecode(orderDetails?['items']);
+        // print(items);
+        items.forEach((itemMap) {
           saveData(itemMap);
         });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ReviewOrder(),
-          ),
-        );
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReviewOrder(orderID: orderID),
+            ),
+          );
+        }
       }
     });
   }

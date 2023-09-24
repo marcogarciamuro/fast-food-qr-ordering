@@ -23,7 +23,9 @@ import 'package:fast_food_qr_ordering/pages/extras_card.dart';
 class ReviewOrder extends StatefulWidget {
   const ReviewOrder({
     Key? key,
+    required this.orderID,
   }) : super(key: key);
+  final String orderID;
 
   @override
   State<ReviewOrder> createState() => _ReviewOrderState();
@@ -39,9 +41,9 @@ class _ReviewOrderState extends State<ReviewOrder> {
 
   @override
   void initState() {
-    super.initState();
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.currentUser = "Worker";
+    super.initState();
     context.read<WorkerBagProvider>().getData();
   }
 
@@ -147,11 +149,13 @@ class _ReviewOrderState extends State<ReviewOrder> {
 
     return Scaffold(
       appBar: AppBar(
-          title:
-              const Text("Review Order", style: TextStyle(color: Colors.black)),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0.0),
+        title:
+            const Text("Review Order", style: TextStyle(color: Colors.black)),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -331,7 +335,7 @@ class _ReviewOrderState extends State<ReviewOrder> {
               },
             ),
           ),
-          const WorkerOrderSummary()
+          WorkerOrderSummary(orderID: widget.orderID)
         ],
       ),
     );

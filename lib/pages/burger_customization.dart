@@ -1,4 +1,3 @@
-import 'package:fast_food_qr_ordering/fries_provider.dart';
 import 'package:fast_food_qr_ordering/pages/custom_expansion_tile.dart';
 import 'package:fast_food_qr_ordering/pages/selectable_option_tile.dart';
 import 'package:fast_food_qr_ordering/burger_provider.dart';
@@ -92,7 +91,7 @@ class _BurgerCustomizationState extends State<BurgerCustomization> {
     }
 
     return WillPopScope(
-      onWillPop: () => onWillPop(),
+      onWillPop: onWillPop,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,

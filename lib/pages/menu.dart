@@ -101,7 +101,7 @@ class _MenuState extends State<Menu> {
 
   DBHelper? dbHelper = DBHelper();
 
-  Widget itemCluster(List items) {
+  Column itemCluster(List items) {
     String clusterTitle;
     if (items[0]["type"] == "meal") {
       clusterTitle = "Meals";

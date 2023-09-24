@@ -1,10 +1,10 @@
 import 'package:fast_food_qr_ordering/bag_provider.dart';
-import 'package:fast_food_qr_ordering/pages/create_code.dart';
+import 'package:fast_food_qr_ordering/pages/order_code.dart';
 import 'package:fast_food_qr_ordering/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-
+import 'package:fast_food_qr_ordering/storage.dart';
 import 'package:uuid/uuid.dart';
 
 class CustomerOrderSummary extends StatefulWidget {
@@ -15,6 +15,7 @@ class CustomerOrderSummary extends StatefulWidget {
 }
 
 class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
+  final storage = OrderStorage();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,10 +26,10 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
           return Container();
         } else {
           final ValueNotifier<double?> subtotal = ValueNotifier(null);
-          int totalItemCount = 0;
+          int itemCount = 0;
           List items = [];
           for (int i = 0; i < provider.bag.length; i++) {
-            totalItemCount += provider.bag[i].quantity!.value;
+            itemCount += provider.bag[i].quantity!.value;
             items.add(provider.bag[i].toMap());
             subtotal.value =
                 (provider.bag[i].price! * provider.bag[i].quantity!.value) +
@@ -40,18 +41,13 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
               valueListenable: subtotal,
               builder: (context, val, child) {
                 var uuid = const Uuid();
-                final orderMap = {
-                  "orderID": uuid.v1(),
-                  "totalPrice": val?.toStringAsFixed(2),
-                  "itemCount": totalItemCount,
-                  "items": items
-                };
-                final orderJSON = json.encode(orderMap);
+                var orderID = uuid.v1();
+                double totalPrice = double.parse(val!.toStringAsFixed(2));
+                // final orderJSON = json.encode(orderMap);
                 const californiaTaxes = 0.0884;
                 final estimatedTaxes =
                     val != null ? (val * californiaTaxes) : 0;
                 final total = val != null ? val + estimatedTaxes : 0;
-                print("JSON: $orderJSON");
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -108,11 +104,13 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          storage.addOrder(orderID, json.encode(items),
+                              itemCount, totalPrice);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  CreateCode(order: orderJSON),
+                                  OrderCode(orderID: orderID.toString()),
                             ),
                           );
                         },

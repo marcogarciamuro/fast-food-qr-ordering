@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608252840063",
+    "project_id": "fast-food-qr-ordering",
+    "storage_bucket": "fast-food-qr-ordering.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608252840063:android:d5b59a86fb1c447452574a",
+        "android_client_info": {
+          "package_name": "com.example.fast_food_qr_ordering"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVwCNLOQi5HiIezlDITZffiWz60KZu4-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fast_food_qr_ordering/pages/menu.dart';
 import 'package:fast_food_qr_ordering/pages/scan_code.dart';
-import 'package:flutter/services.dart';
+import 'package:fast_food_qr_ordering/storage.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,6 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final storage = OrderStorage();
   @override
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).orientation);
@@ -24,20 +24,19 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
               children: [
-                Container(
-                    // color: Colors.red,
-                    child: Image.asset("./pictures/in-n-out.png")),
+                Image.asset("./pictures/Up-n-Atom.png"),
                 const SizedBox(height: 30),
                 const Text(
                   'Quality you can taste',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'Courgette',
-                      fontSize: 30,
-                      fontStyle: FontStyle.italic),
+                    fontFamily: 'Courgette',
+                    fontSize: 30,
+                    // fontStyle: FontStyle.italic,
+                  ),
                 ),
                 const SizedBox(height: 70),
                 SizedBox(
@@ -48,13 +47,11 @@ class _HomeState extends State<Home> {
                       backgroundColor: const Color(0xFFE02A27),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Menu()),
-                      );
+                      Navigator.pushNamed(context, '/menu');
                     },
-                    child:
-                        const Text("Customer", style: TextStyle(fontSize: 20)),
+                    child: const Text("Customer",
+                        style:
+                            TextStyle(fontSize: 20, fontFamily: 'Courgette')),
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -72,54 +69,14 @@ class _HomeState extends State<Home> {
                             builder: (context) => const ScanCode()),
                       );
                     },
-                    child:
-                        const Text("Employee", style: TextStyle(fontSize: 20)),
+                    child: const Text("Employee",
+                        style:
+                            TextStyle(fontSize: 20, fontFamily: "Courgette")),
                   ),
                 ),
               ],
             ),
           ),
-          // Expanded(
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       SizedBox(
-          //         height: 50,
-          //         width: 150,
-          //         child: ElevatedButton(
-          //           style: ElevatedButton.styleFrom(
-          //             backgroundColor: const Color(0xFFE02A27),
-          //           ),
-          //           onPressed: () {
-          //             Navigator.push(
-          //               context,
-          //               MaterialPageRoute(builder: (context) => const Menu()),
-          //             );
-          //           },
-          //           child: const Text("Customer"),
-          //         ),
-          //       ),
-          //       const SizedBox(height: 30),
-          //       SizedBox(
-          //         height: 50,
-          //         width: 150,
-          //         child: ElevatedButton(
-          //           style: ElevatedButton.styleFrom(
-          //             backgroundColor: const Color(0xFFE02A27),
-          //           ),
-          //           onPressed: () {
-          //             Navigator.push(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const ScanCode()),
-          //             );
-          //           },
-          //           child: const Text("Employee"),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // )
         ],
       ),
     );

@@ -21,7 +21,7 @@ class DBHelper {
   initDatabase() async {
     print("INITIALIZING DATABAASE");
     io.Directory directory = await getApplicationDocumentsDirectory();
-    String path = join(directory.path, 'bag17.db');
+    String path = join(directory.path, 'bag18.db');
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
@@ -84,6 +84,11 @@ class DBHelper {
     var dbClient = await database;
     return await dbClient!.update('worker_bag', bag.toMap(),
         where: "uniqueID = ?", whereArgs: [bag.uniqueID]);
+  }
+
+  Future<int> deleteAllCustomerBagItems() async {
+    var dbClient = await database;
+    return await dbClient!.delete('customer_bag');
   }
 
   Future<int> deleteCustomerBagItem(String id) async {
