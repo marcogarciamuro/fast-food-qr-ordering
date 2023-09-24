@@ -1,7 +1,7 @@
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 import 'package:fast_food_qr_ordering/fries_provider.dart';
 import 'package:fast_food_qr_ordering/drink_provider.dart';
 import 'package:fast_food_qr_ordering/meal_provider.dart';
-import 'package:fast_food_qr_ordering/pages/view_meal.dart';
 import 'package:fast_food_qr_ordering/user_provider.dart';
 import 'package:fast_food_qr_ordering/worker_bag_provider.dart';
 import 'package:fast_food_qr_ordering/shake_provider.dart';
@@ -30,6 +30,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => ShakeProvider()),
           ChangeNotifierProvider(create: (_) => MealProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => ExtrasProvider()),
         ],
         child: Builder(builder: (BuildContext context) {
           return MaterialApp(

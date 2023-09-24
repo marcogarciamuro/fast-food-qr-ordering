@@ -1,6 +1,8 @@
 import 'package:fast_food_qr_ordering/db_helper.dart';
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:flutter/rendering.dart';
@@ -43,16 +45,19 @@ class _OrderCodeState extends State<OrderCode> {
     }
   }
 
-  Future<bool> _onWillPop() async {
-    Navigator.popUntil(context, ModalRoute.withName('/menu'));
-    dbHelper!.deleteAllCustomerBagItems();
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final extrasProvider = Provider.of<ExtrasProvider>(context);
+    Future<bool> onWillPop() async {
+      extrasProvider.resetShowExtras();
+      dbHelper!.deleteAllCustomerBagItems();
+      Navigator.pop(context);
+      Navigator.pop(context);
+      return true;
+    }
+
     return WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop: onWillPop,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -61,7 +66,7 @@ class _OrderCodeState extends State<OrderCode> {
           automaticallyImplyLeading: false,
           leading: IconButton(
             onPressed: () async {
-              await _onWillPop();
+              await onWillPop();
             },
             icon: const Icon(Icons.close),
             splashRadius: 1.0,

@@ -1,4 +1,5 @@
 import 'package:fast_food_qr_ordering/bag_provider.dart';
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 import 'package:fast_food_qr_ordering/pages/order_code.dart';
 import 'package:fast_food_qr_ordering/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
   final storage = OrderStorage();
   @override
   Widget build(BuildContext context) {
+    final extrasProvider = Provider.of<ExtrasProvider>(context);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4),
       child: Consumer<BagProvider>(
@@ -104,6 +106,7 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          extrasProvider.resetShowExtras();
                           storage.addOrder(orderID, json.encode(items),
                               itemCount, totalPrice);
                           Navigator.push(

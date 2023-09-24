@@ -1,6 +1,7 @@
 import 'package:fast_food_qr_ordering/bag_model.dart';
 import 'package:fast_food_qr_ordering/bag_provider.dart';
 import 'package:fast_food_qr_ordering/db_helper.dart';
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 import 'package:fast_food_qr_ordering/user_provider.dart';
 import 'package:fast_food_qr_ordering/worker_bag_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,18 +20,11 @@ int ketchupQuantity = 0;
 int spreadQuantity = 0;
 int peppersQuantity = 0;
 
-List<bool> showExtras = [true, true, true];
-
 class _ExtrasCardState extends State<ExtrasCard> {
-  @override
-  void initState() {
-    super.initState();
-    showExtras = [true, true, true];
-  }
-
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final extrasProvider = Provider.of<ExtrasProvider>(context);
     DBHelper dbHelper = DBHelper();
     List extras = [
       {"name": "Spread", "id": 10, "image": "pictures/spread.jpg"},
@@ -75,7 +69,7 @@ class _ExtrasCardState extends State<ExtrasCard> {
       }
     }
 
-    return showExtras.every((extra) => !extra)
+    return extrasProvider.showExtras.every((extra) => !extra)
         ? Container()
         : Card(
             child: Padding(
@@ -96,7 +90,7 @@ class _ExtrasCardState extends State<ExtrasCard> {
                       scrollDirection: Axis.horizontal,
                       itemCount: extras.length,
                       itemBuilder: (context, index) {
-                        return showExtras[index] == true
+                        return extrasProvider.showExtras[index] == true
                             ? Column(
                                 children: [
                                   Padding(
@@ -149,13 +143,9 @@ class _ExtrasCardState extends State<ExtrasCard> {
                                                             WorkerBagProvider>()
                                                         .getData();
                                                   }
-                                                  if (showExtras[index] ==
-                                                      true) {
-                                                    setState(() {
-                                                      showExtras[index] = false;
-                                                    });
-                                                    print('set to false');
-                                                  }
+                                                  extrasProvider
+                                                      .hideExtra(index);
+                                                  print('set to false');
                                                 }),
                                           ),
                                         ),
@@ -168,7 +158,7 @@ class _ExtrasCardState extends State<ExtrasCard> {
                             : Container();
                       },
                       separatorBuilder: (context, index) {
-                        return SizedBox(width: 10);
+                        return const SizedBox(width: 10);
                       },
                     ),
                   ),

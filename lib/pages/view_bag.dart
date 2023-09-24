@@ -18,6 +18,7 @@ import 'package:fast_food_qr_ordering/bag_provider.dart';
 import 'package:fast_food_qr_ordering/bag_model.dart';
 import 'package:provider/provider.dart';
 import 'package:fast_food_qr_ordering/pages/menu.dart';
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 
 class ViewBag extends StatefulWidget {
   const ViewBag({Key? key}) : super(key: key);
@@ -83,6 +84,7 @@ class _ViewBagState extends State<ViewBag> {
     final drinkProvider = Provider.of<DrinkProvider>(context);
     final fryProvider = Provider.of<FryProvider>(context);
     final mealProvider = Provider.of<MealProvider>(context);
+    final extrasProvider = Provider.of<ExtrasProvider>(context);
 
     void redirectToRespectiveScreen(int itemID, Bag bagItemToEdit) {
       if (itemIsMeal(itemID)) {
@@ -323,6 +325,24 @@ class _ViewBagState extends State<ViewBag> {
                                                       .toString()));
                                             },
                                             deleteItem: () {
+                                              bool itemIsExtra = itemID == 10 ||
+                                                  itemID == 11 ||
+                                                  itemID == 12;
+                                              if (itemIsExtra) {
+                                                int extraIndex;
+                                                switch (itemID) {
+                                                  case 10:
+                                                    extraIndex = 0;
+                                                    break;
+                                                  case 11:
+                                                    extraIndex = 1;
+                                                    break;
+                                                  default:
+                                                    extraIndex = 2;
+                                                }
+                                                extrasProvider
+                                                    .showExtra(extraIndex);
+                                              }
                                               dbHelper!.deleteCustomerBagItem(
                                                   provider
                                                       .bag[index].uniqueID!);

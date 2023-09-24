@@ -47,6 +47,8 @@ class _ReviewOrderState extends State<ReviewOrder> {
     context.read<WorkerBagProvider>().getData();
   }
 
+  List<bool> showExtras = [true, true, true];
+
   @override
   Widget build(BuildContext context) {
     final bag = Provider.of<WorkerBagProvider>(context);
