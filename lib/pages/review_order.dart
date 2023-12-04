@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:fast_food_qr_ordering/bag_functions.dart';
 import 'package:fast_food_qr_ordering/burger_provider.dart';
 import 'package:fast_food_qr_ordering/drink_provider.dart';
+import 'package:fast_food_qr_ordering/extras_provider.dart';
 import 'package:fast_food_qr_ordering/fries_provider.dart';
 import 'package:fast_food_qr_ordering/meal_provider.dart';
 import 'package:fast_food_qr_ordering/pages/customize_drink.dart';
@@ -57,6 +58,7 @@ class _ReviewOrderState extends State<ReviewOrder> {
     final drinkProvider = Provider.of<DrinkProvider>(context);
     final fryProvider = Provider.of<FryProvider>(context);
     final mealProvider = Provider.of<MealProvider>(context);
+    final extrasProvider = Provider.of<ExtrasProvider>(context);
 
     void redirectToRespectiveScreen(int itemID, Bag bagItemToEdit) {
       if (itemIsMeal(itemID)) {
@@ -187,6 +189,19 @@ class _ReviewOrderState extends State<ReviewOrder> {
                         final Bag bagItem = provider.bag[index];
                         final itemSpecialDetails =
                             getFormattedSpecialOptions(itemID, itemDetailsJSON);
+                        bool itemIsExtra = itemID == 10 || itemID == 11 || itemID == 12 || itemID == 13;
+                        int extraIndex = 0;
+                          if(itemIsExtra) {
+                            switch(itemID) {
+                              case 11:
+                                extraIndex = 1;
+                                break;
+                              case 12:
+                                extraIndex = 2;
+                                break;
+                            }
+                            extrasProvider.hideExtra(extraIndex);
+                        }
                         return GestureDetector(
                           onTap: () {
                             setItemCustomizationIndices(
@@ -285,6 +300,9 @@ class _ReviewOrderState extends State<ReviewOrder> {
                                                   .toString()));
                                         },
                                         deleteItem: () {
+                                          if(itemIsExtra) {
+                                            extrasProvider.showExtra(extraIndex);
+                                          }
                                           dbHelper!.deleteWorkerBagItem(
                                               provider.bag[index].uniqueID!);
                                           provider.removeItem(

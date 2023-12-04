@@ -118,8 +118,8 @@ class _CustomerOrderSummaryState extends State<CustomerOrderSummary> {
                           );
                         },
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFFE02A27)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(

@@ -73,33 +73,60 @@ class _OrderCodeState extends State<OrderCode> {
           ),
         ),
         body: Center(
-          child: Column(
-            children: [
-              const Text(
-                "Order Complete",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
-              const Text("Show this code at restaurant to place order",
-                  style: TextStyle(fontSize: 15)),
-              const SizedBox(height: 15),
-              RepaintBoundary(
-                key: _globalKey,
-                child: QrImage(data: widget.orderID, size: 300),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  await _saveQrCode();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Downloaded to Gallery!'),
-                      ),
-                    );
-                  }
-                },
-                child: const Text("Save to Gallery"),
-              ),
-            ],
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+            child: Column(
+              children: [
+                const Text(
+                  "Order Complete",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
+                const SizedBox(height: 10),
+                const Text("Show this code at restaurant to place your order",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 15),
+                RepaintBoundary(
+                  key: _globalKey,
+                  child: QrImage(data: widget.orderID, size: 300),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  width: 180,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE02A27)),
+                    onPressed: () async {
+                      await _saveQrCode();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Downloaded to Gallery!'),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text(
+                      "Save to Gallery",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 25),
+                // const Text(
+                //   "We appreciate your support. Enjoy your meal!",
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.w500,
+                //     // fontFamily: 'Courgette',
+                //     fontStyle: FontStyle.italic,
+                //     fontSize: 20,
+                //   ),
+                // )
+              ],
+            ),
           ),
         ),
       ),
